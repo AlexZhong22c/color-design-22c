@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>22c-颜色设计</title>
+  <link rel="stylesheet" type="text/css" href="css/color-design.css">
+</head>
+<body>
+  <div id="color-design">
+    <h2>日系风格背景颜色：</h2>
+    <p class="desc">在此致敬原作者：<a href="http://jinzhe.net/post/35/">ZEE</a></p>
+    <ul class="clearfix">
+      <li v-for="item in japanStyle" class="li">
+        <div :style="{ background: item['hex'], color: binNinvert(item['hex']) }" class="show">
+          <p>{{ item['hex'] }}&nbsp;&nbsp;{{ item['hex'].toLowerCase() }}</p>
+          <p>{{ item['hex'] | toRGBstr }}</p>
+          <p>{{ item['name'] }}</p>
+        </div>
+      </li>
+    </ul>
+    <p><strong>内容待续，</strong>如果您觉得内容不错的话，可以去留一个<a href="https://github.com/AlexZhong22c">star</a>，或者：</p>
+    <div class="footer">
+      <figure>
+        <figcaption>微信打赏</figcaption>
+        <img src="image/weixin-tip.png" alt="wx-tip">
+      </figure>
+      <figure>
+        <figcaption>支付宝打赏</figcaption>
+        <img src="image/zhufubao-tip.jpg" alt="zfb-tip">
+      </figure>
+    </div>
+  </div>
+  <script src="js/vue-dev.js"></script>
+  <script src="js/styleData.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#color-design',
+      data: {
+        japanStyle
+      },
+      computed: {
+      },
+      methods: {
+        // 将背景色黑白二值化处理并且作一次反相：
+        // 如果背景色偏黑就让字体色偏白，如果背景色偏白就让字体色偏黑，以免两色相近导致看不清文字的内容
+        binNinvert (str) {
+          if (!str) return '#3F3F3F' // 默认返回#3F3F3F类黑色
+          var sum = 0
+          for(var i=1; i<7; i+=2) {
+            sum += parseInt("0x"+ str.slice(i,i+2))
+          }
+          return (sum / 3 < 127) ? '#FFFFCC' : '#3F3F3F' // #FFFFCC为类白色
+        }
+      },
+      filters: {
+        // #A8D8B9 ==> RGB(168,216,185)
+        toRGBstr: function (str) {
+          if (!str) return ''
+          var tmpArr = []
+          for(var i=1; i<7; i+=2) {
+            tmpArr.push( parseInt("0x"+ str.slice(i,i+2)) )
+          }
+          return "RGB(" + tmpArr.join(",") + ")"
+        }
+      }
+    })
+
+    // title:color-design
+    // author: AlexZhong22c
+    // date: 2017-07-11
+  </script>
+</body>
+</html>
